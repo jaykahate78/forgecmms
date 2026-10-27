@@ -1,0 +1,26 @@
+# Apana Tech - ForgeCMMS on Render + Neon PostgreSQL.
+# Create a Blueprint from this repository only after a separate Neon project
+# has been connected. Do not put connection strings or S3 keys in Git.
+services:
+  - type: web
+    name: apana-field-service-crm
+    runtime: docker
+    plan: free
+    region: singapore
+    repo: https://github.com/jaykahate78/forgecmms
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: BASE_URL
+        value: https://apana-field-service-crm.onrender.com
+      # Optional: set STORAGE_ENDPOINT, STORAGE_ACCESS_KEY_ID,
+      # STORAGE_SECRET_ACCESS_KEY, STORAGE_BUCKET and STORAGE_REGION in
+      # Render Environment after provisioning S3-compatible storage.
+      # Without them, attachments and PDF file storage are unavailable.
+      # A separate worker service is needed for generated PDF reports.
